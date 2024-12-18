@@ -19,7 +19,9 @@ public class Ejercicio5 {
             maximo = n;
             }
     }
+
+    int media = suma/50;
     
-    System.out.println("Mínimo: " + minimo + "Máximo: " + maximo + "Media: " + suma / 50);
+    System.out.println("Mínimo: " + minimo + "Máximo: " + maximo + "Media: " + media);
     }
 }
