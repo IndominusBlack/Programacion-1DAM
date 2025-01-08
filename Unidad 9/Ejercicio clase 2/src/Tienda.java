@@ -10,10 +10,16 @@ public class Tienda {
         zapatillas.vende(20);
         chanclas.reponer(70);
 
+        try{
         System.out.println("------------------");
         System.out.println("Después de vender 20 zapatillas y reponer 70 chanclas, los productos se quedan así:");
         System.out.println(chanclas);
         System.out.println(zapatillas);
+        } catch (Exception e) {
+            System.out.println("no me toques lo cojone");
+        }finally {  
+            System.out.println("se ha acabao el programa bicho.");
+        }
 
         chanclas.vende(30);
         zapatillas.reponer(10);

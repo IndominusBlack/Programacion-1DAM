@@ -1,8 +1,13 @@
 public class Ameba {
 
     private int peso;
-    public Ameba() {
+    private String nombre;
+    private int altura;
+
+    public Ameba(String nombre, int altura) {
         this.peso = 3;
+        this.nombre = nombre;
+        this.altura = altura;
     }
 
     public void come (int pesoParticula){
@@ -18,7 +23,23 @@ public class Ameba {
         return peso;
     }
 
+    public String getNombre () {
+        return nombre;
+    }
+
+    public int getAltura () {
+        return altura;
+    }
+
+    public void setNombre (String nuevoNombre) {
+        nombre = nuevoNombre;
+    }
+
     public void setPeso (int nuevoPeso) {
         peso = nuevoPeso;
+    }
+
+    public String toString() {
+        return "La ameba " + nombre + " pesa " + peso + " y mide " + altura;
     }
 }
