@@ -4,6 +4,6 @@
 
 ### El propietario de este GitHub es *Eduardo Heras Nuño*
 
-#### ==1 DAM T==
+#### 1 DAM T
 
-Consulta el [Libro de Luis](https://github.com/IndominusBlack/Programacion-1DAM/blob/main/Libro%20Java.pdf) para más conocimiento. Es el que estamos empleando para cursar esta asignatura. 
+Consulta el 🔥[Libro de Luis](https://github.com/IndominusBlack/Programacion-1DAM/blob/main/Libro%20Java.pdf)🔥 para más conocimiento. Es el que estamos empleando para cursar esta asignatura. 
