@@ -30,12 +30,58 @@ public class CPIFP implements Serializable<Estudiante>{
         return false;
     }
 
-    public boolean quitarEstudiante(int idEst){
-        
+    public boolean quitarEstudiante(int idEst) {
+        File archivoOriginal = new File(nombreFichero);
+        File archivoTemporal = new File(nombreFichero + ".tmp");
+        boolean encontrado = false;
+    
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoOriginal));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTemporal))) {
+    
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                Estudiante estudiante = deserializarEstudiante(linea);
+                if (estudiante.getId() != idEst) {
+                    bw.write(linea);
+                    bw.newLine();
+                } else {
+                    encontrado = true; // Marcar que el estudiante fue encontrado y eliminado
+                }
+            }
+    
+        } catch (IOException e) {
+            System.out.println("Error al leer o escribir archivos: " + e.getMessage());
+            return false;
+        }
+    
+        // Cerrar los flujos antes de eliminar/renombrar
+        if (!encontrado) {
+            System.out.println("Estudiante con ID " + idEst + " no encontrado.");
+            archivoTemporal.delete(); // Eliminamos el archivo temporal si no hubo cambios
+            return false;
+        }
+    
+        // Intentamos eliminar el archivo original
+        if (!archivoOriginal.delete()) {
+            System.out.println("Error: No se pudo eliminar el archivo original.");
+            return false;
+        }
+    
+        // Renombramos el archivo temporal para que sea el definitivo
+        if (!archivoTemporal.renameTo(archivoOriginal)) {
+            System.out.println("Error: No se pudo renombrar el archivo temporal.");
+            return false;
+        }
+    
+        return true;
     }
+    
 
     public boolean modificarEstudiante(int idEst, String nombreEst){
-
+        if (quitarEstudiante(idEst)) {
+            return añadirEstudiante(idEst, nombreEst);
+        }
+        return false;
     }
 
     public String obtenerEstudiante(int idEst){
@@ -78,7 +124,7 @@ public class CPIFP implements Serializable<Estudiante>{
 
     @Override
     public String serializarEstudiante(Estudiante estudiante){
-        return String.format("%d; %s", estudiante.getId(), estudiante.getNombre());
+        return String.format("%d;%s", estudiante.getId(), estudiante.getNombre());
     }
 
     @Override
@@ -89,5 +135,4 @@ public class CPIFP implements Serializable<Estudiante>{
         Estudiante estudiante = new Estudiante(id, nombre);
         return estudiante;
     }
-
 }
