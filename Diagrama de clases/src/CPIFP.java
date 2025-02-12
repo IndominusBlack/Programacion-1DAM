@@ -45,7 +45,7 @@ public class CPIFP implements Serializable<Estudiante>{
                     bw.write(linea);
                     bw.newLine();
                 } else {
-                    encontrado = true; // Marcar que el estudiante fue encontrado y eliminado
+                    encontrado = true;
                 }
             }
     
@@ -54,20 +54,17 @@ public class CPIFP implements Serializable<Estudiante>{
             return false;
         }
     
-        // Cerrar los flujos antes de eliminar/renombrar
         if (!encontrado) {
             System.out.println("Estudiante con ID " + idEst + " no encontrado.");
-            archivoTemporal.delete(); // Eliminamos el archivo temporal si no hubo cambios
+            archivoTemporal.delete();
             return false;
         }
     
-        // Intentamos eliminar el archivo original
         if (!archivoOriginal.delete()) {
             System.out.println("Error: No se pudo eliminar el archivo original.");
             return false;
         }
     
-        // Renombramos el archivo temporal para que sea el definitivo
         if (!archivoTemporal.renameTo(archivoOriginal)) {
             System.out.println("Error: No se pudo renombrar el archivo temporal.");
             return false;
@@ -77,12 +74,42 @@ public class CPIFP implements Serializable<Estudiante>{
     }
     
 
-    public boolean modificarEstudiante(int idEst, String nombreEst){
-        if (quitarEstudiante(idEst)) {
-            return añadirEstudiante(idEst, nombreEst);
+    public boolean modificarEstudiante(int idEst, String nuevoNombre) {
+        File archivoOriginal = new File(nombreFichero);
+        File archivoTemporal = new File(nombreFichero + ".tmp");
+    
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoOriginal));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTemporal))) {
+    
+            String linea;
+            boolean encontrado = false;
+    
+            while ((linea = br.readLine()) != null) {
+                Estudiante estudiante = deserializarEstudiante(linea);
+                
+                if (estudiante.getId() == idEst) {
+                    estudiante.setNombre(nuevoNombre);
+                    bw.write(serializarEstudiante(estudiante));
+                    encontrado = true;
+                } else {
+                    bw.write(linea);
+                }
+                bw.newLine();
+            }
+    
+            if (!archivoOriginal.delete() || !archivoTemporal.renameTo(archivoOriginal)) {
+                System.out.println("Error al actualizar el archivo.");
+                return false;
+            }
+            
+            return encontrado;
+    
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return false;
         }
-        return false;
     }
+    
 
     public String obtenerEstudiante(int idEst){
         try {
